@@ -15,7 +15,9 @@ export default function Home() {
         <p className={`text-3xl md:text-6xl mt-2`}>Helping teachers with <span className={"text-cornflower-400"}>artificial intelligence</span>, one by one.</p>
       </div>
       <div className={"fixed bottom-32 flex flex-col place-items-center w-screen"}>
-        <Button className={"bg-blue-500 hover:bg-blue-400 w-fit text-cornflower-50"}>Join a game</Button>
+        <Button className={"bg-blue-500 hover:bg-blue-400 w-fit text-cornflower-50"}>
+          <Link href={"/play"}>Join a game</Link>
+        </Button>
         <Image src={"/divider.svg"} alt={"Divider"} className={"my-4"} width={250} height={100} />
         <Button asChild className={"bg-blue-500 hover:bg-blue-400 w-fit text-cornflower-50"}>
           <Link href={"/create"}>Create a game</Link>
