@@ -13,7 +13,6 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { redirect } from 'next/navigation'
 import { Poppins } from "next/font/google";
 import { useRouter } from 'next/router';
 
@@ -77,7 +76,7 @@ export default function Create({ socket }) {
           </div>
         </CardContent>
         <CardFooter className={"flex justify-end"}>
-          <Button className={"bg-cornflower-500 hover:bg-cornflower-400"} onClick={handleSubmit}>Create</Button>
+          <Button className={"bg-cornflower-500 hover:bg-cornflower-400"} onClick={createGame}>Create</Button>
         </CardFooter>
       </Card>
     </div>
