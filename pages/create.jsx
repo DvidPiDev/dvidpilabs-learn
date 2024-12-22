@@ -14,7 +14,8 @@ import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { redirect } from 'next/navigation'
-import {Poppins} from "next/font/google";
+import { Poppins } from "next/font/google";
+import { useRouter } from 'next/router';
 
 export const poppins = Poppins({ weight: "400", subsets: ['latin'] });
 
@@ -31,20 +32,37 @@ function pickRandom() {
   return topics[randomItem];
 }
 
-export default function create() {
+export default function Create({ socket }) {
+  const router = useRouter();
+  const [gameCode, setGameCode] = useState(null);
+  const [error, setError] = useState('');
   const [inputValue, setInputValue] = useState('')
-  const handleChange = (event) => {
-    setInputValue(event.target.value);
+  const handleChange = (event) => {setInputValue(event.target.value);};
+
+  const createGame = async () => {
+    try {
+      const res = await fetch('/api/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: `{"topic":"${inputValue}"}`,
+      });
+      const data = await res.json();
+      setGameCode(data.code);
+
+      if (socket) {
+        socket.emit('create-game', { code: data.code });
+      }
+
+      setTimeout(() => {
+        router.push(`/status?code=${data.code}`);
+      }, 500);
+    } catch (error) {
+      setError('failed to create game');
+    }
   };
 
-  async function handleSubmit() {
-    const data = await fetch(`http://localhost:3000/api/create`, {
-      method: "POST",
-      body: `{"topic":"${inputValue}"}`
-    });
-    const gameData = await data.json()
-    redirect(`http://localhost:3000/play/` + gameData.code);
-  }
   return (
     <div className={"flex place-items-center justify-center h-screen w-screen " + poppins.className}>
       <Card className={"w-96 h-fit border-none text-black"}>
