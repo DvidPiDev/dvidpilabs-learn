@@ -21,8 +21,7 @@ export default function Status() {
   }, []);
 
   const handleEndGame = () => {
-    socket.emit('end-game', { code: router.query.code });
-    router.push('/end');
+      socket.emit('end-game', { code: router.query.code });
   };
 
   return (

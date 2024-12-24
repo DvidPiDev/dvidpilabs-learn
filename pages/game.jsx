@@ -7,7 +7,6 @@ export default function Game() {
   const router = useRouter();
   const { gameState } = useGame();
   const [question, setQuestion] = useState(null);
-  const [questionIndex, setQuestionIndex] = useState(0);
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
@@ -18,17 +17,29 @@ export default function Game() {
       router.push('/end').then(r => void(r));
     });
 
+    socket.on('question', (question) => {
+      setQuestion(question);
+    });
+
     return () => {
       socket.disconnect();
     };
   }, []);
+
+  useEffect(() => {
+    if (socket && gameState) {
+      socket.emit('request-question', {
+        code: gameState.code,
+        playerId: gameState.playerId,
+      });
+    }
+  }, [socket, gameState]);
 
   const handleAnswer = (answer) => {
     socket.emit('submit-answer', {
       code: gameState.code,
       playerId: gameState.playerId,
       answer,
-      questionIndex,
     });
   };
 
